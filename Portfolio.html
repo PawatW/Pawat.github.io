@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Pawat Wangsirisuk — Portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet" />
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: oklch(0.11 0.008 240);
+    --bg2: oklch(0.15 0.008 240);
+    --bg3: oklch(0.18 0.01 240);
+    --fg: oklch(0.96 0.005 240);
+    --fg2: oklch(0.65 0.01 240);
+    --accent: oklch(0.78 0.17 158);
+    --accent2: oklch(0.78 0.17 220);
+    --border: oklch(0.25 0.01 240);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--fg);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  ::selection { background: var(--accent); color: var(--bg); }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+  #root { min-height: 100vh; }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(32px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+  }
+  @keyframes grain {
+    0%, 100% { transform: translate(0, 0); }
+    10% { transform: translate(-2%, -3%); }
+    30% { transform: translate(3%, 2%); }
+    50% { transform: translate(-1%, 4%); }
+    70% { transform: translate(4%, -1%); }
+    90% { transform: translate(-3%, 2%); }
+  }
+
+  .noise-overlay {
+    pointer-events: none;
+    position: fixed;
+    inset: -50%;
+    width: 200%;
+    height: 200%;
+    opacity: 0.028;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    animation: grain 0.5s steps(1) infinite;
+    z-index: 9999;
+  }
+</style>
+</head>
+<body>
+<div class="noise-overlay"></div>
+<div id="root"></div>
+
+<script type="text/babel">
+
+const { useState, useEffect, useRef } = React;
+
+const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+  "accentColor": "oklch(0.78 0.17 158)",
+  "darkMode": true,
+  "showAvailability": true,
+  "layoutStyle": "editorial"
+} /*EDITMODE-END*/;
+
+// ── Data ─────────────────────────────────────────────────────────────────────
+
+const data = {
+  name: "Pawat Wangsirisuk",
+  nameShort: "Pawat W.",
+  title: "Computer Science Student",
+  university: "Kasetsart University",
+  period: "2023 – Present",
+  gpa: "2.86",
+  phone: "064-101-2501",
+  email: "pavatwansirisuk2547@gmail.com",
+  location: "Khlong Toei, Bangkok",
+  github: "PawatW",
+  seeking: "Seeking Internship 2025",
+  bio: "CS student at Kasetsart University passionate about full-stack development, building scalable systems, and solving real-world problems through code.",
+
+  skills: {
+    Languages: ["JavaScript", "TypeScript", "Java", "Python", "C++"],
+    Frameworks: ["React", "Next.js", "Spring Boot"],
+    Tools: ["Git", "Docker", "Kubernetes", "Jenkins", "Jira", "Jupyter"],
+    Database: ["PostgreSQL"]
+  },
+
+  projects: [
+    {
+      title: "Student Request Management System",
+      tags: ["Java", "JavaFX"],
+      desc: "Built a role-based desktop application (Admin, Staff, Advisor, Student) with secure login and profile management.",
+      bullets: [
+        "Implemented request workflow with status tracking and dashboard",
+      ],
+      color: "oklch(0.78 0.17 300)",
+    },
+    {
+      title: "Full-Stack Inventory Management System",
+      tags: ["Spring Boot", "Next.js", "Java"],
+      desc: "Full-stack inventory management platform built with Java Spring Boot and Next.js.",
+      bullets: [
+        "Implemented secure JWT authentication, integrated PostgreSQL for data storage, and utilized Cloudinary for image management",
+        "Containerized the entire application utilizing Docker Compose to ensure seamless deployment",
+      ],
+      color: "oklch(0.78 0.17 220)",
+      link: "https://invetory-management-full-stack.vercel.app/admin/staff",
+    },
+    {
+      title: "Frontend Student Award Management System",
+      tags: ["Next.js", "TypeScript", "PostgreSQL", "Docker"],
+      desc: "Developed a responsive web application to digitalize the university's student award application and evaluation process.",
+      bullets: [
+        "Engineered a Dynamic Form Builder, enabling administrators to seamlessly create and customize application fields for various award categories",
+      ],
+      color: "oklch(0.78 0.17 158)",
+    },
+    {
+      title: "Web-based Room Modeling Application for Tile Customization",
+      tags: ["Three.js", "JavaScript", "Python"],
+      desc: "Engineered a web-based 3D modeling tool for real-time tile customization using Three.js.",
+      bullets: [
+        "Responsible for rendering 3D environments, implementing dynamic texture mapping for floors and walls, and optimizing the viewer for smooth web performance",
+      ],
+      color: "oklch(0.78 0.17 60)",
+      link: "https://vercel.com/pawatws-projects/tile-gen-pm-project",
+    },
+  ],
+
+
+  additionalSkills: ["English", "Thai"]
+};
+
+// ── Helpers ───────────────────────────────────────────────────────────────────
+
+function useInView(threshold = 0.15) {
+  const ref = useRef(null);
+  const [visible, setVisible] = useState(false);
+  useEffect(() => {
+    const obs = new IntersectionObserver(([e]) => {
+      if (e.isIntersecting) {setVisible(true);obs.disconnect();}
+    }, { threshold });
+    if (ref.current) obs.observe(ref.current);
+    return () => obs.disconnect();
+  }, []);
+  return [ref, visible];
+}
+
+// ── Nav ───────────────────────────────────────────────────────────────────────
+
+function Nav({ tweaks }) {
+  const [scrolled, setScrolled] = useState(false);
+  useEffect(() => {
+    const fn = () => setScrolled(window.scrollY > 40);
+    window.addEventListener('scroll', fn);
+    return () => window.removeEventListener('scroll', fn);
+  }, []);
+
+  const links = ['About', 'Skills', 'Projects', 'Contact'];
+
+  return (
+    <nav style={{
+      position: 'fixed', top: 0, left: 0, right: 0, zIndex: 100,
+      padding: '0 2rem',
+      height: '60px',
+      display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+      background: scrolled ? 'oklch(0.11 0.008 240 / 0.92)' : 'transparent',
+      backdropFilter: scrolled ? 'blur(12px)' : 'none',
+      borderBottom: scrolled ? '1px solid var(--border)' : 'none',
+      transition: 'all 0.3s ease'
+    }}>
+      <span style={{ fontFamily: 'Space Grotesk', fontWeight: 700, fontSize: '1rem', letterSpacing: '-0.02em' }}>
+        PW<span style={{ color: tweaks.accentColor }}>.</span>
+      </span>
+      <div style={{ display: 'flex', gap: '2rem' }}>
+        {links.map((l) =>
+        <a key={l} href={`#${l.toLowerCase()}`} style={{
+          color: 'var(--fg2)', textDecoration: 'none', fontSize: '0.85rem',
+          fontWeight: 500, letterSpacing: '0.02em', textTransform: 'uppercase',
+          transition: 'color 0.2s'
+        }}
+        onMouseEnter={(e) => e.target.style.color = tweaks.accentColor}
+        onMouseLeave={(e) => e.target.style.color = 'var(--fg2)'}>
+          {l}</a>
+        )}
+      </div>
+    </nav>);
+
+}
+
+// ── Hero ──────────────────────────────────────────────────────────────────────
+
+function Hero({ tweaks }) {
+  const [tick, setTick] = useState(0);
+  useEffect(() => {
+    const id = setInterval(() => setTick((t) => t + 1), 600);
+    return () => clearInterval(id);
+  }, []);
+
+  return (
+    <section id="about" style={{
+      minHeight: '100vh', display: 'flex', flexDirection: 'column',
+      justifyContent: 'center', padding: '6rem 2rem 4rem',
+      maxWidth: '1100px', margin: '0 auto', position: 'relative'
+    }}>
+      {/* Availability badge */}
+      {tweaks.showAvailability &&
+      <div style={{
+        display: 'inline-flex', alignItems: 'center', gap: '0.5rem',
+        background: 'oklch(0.78 0.17 158 / 0.1)',
+        border: '1px solid oklch(0.78 0.17 158 / 0.3)',
+        borderRadius: '100px', padding: '0.35rem 1rem',
+        width: 'fit-content', marginBottom: '3rem',
+        animation: 'fadeIn 0.6s ease 0.2s both'
+      }}>
+          <span style={{
+          width: 8, height: 8, borderRadius: '50%',
+          background: tweaks.accentColor,
+          boxShadow: `0 0 8px ${tweaks.accentColor}`,
+          display: 'inline-block',
+          animation: 'blink 2s ease infinite'
+        }} />
+          <span style={{ fontSize: '0.8rem', color: tweaks.accentColor, fontWeight: 500, letterSpacing: '0.05em' }}>
+            OPEN TO INTERNSHIP
+          </span>
+        </div>
+      }
+
+      {/* Big name */}
+      <h1 style={{
+        fontFamily: 'Space Grotesk', fontWeight: 700,
+        fontSize: 'clamp(3rem, 9vw, 8rem)',
+        lineHeight: 0.95, letterSpacing: '-0.04em',
+        marginBottom: '0.5rem',
+        animation: 'fadeUp 0.7s ease 0.1s both'
+      }}>
+        {data.name.split(' ').map((w, i) =>
+        <span key={i} style={{ display: 'block' }}>
+            {i === 1 && <span style={{ color: tweaks.accentColor }}>{w}</span>}
+            {i !== 1 && w}
+          </span>
+        )}
+      </h1>
+
+      {/* Sub title */}
+      <div style={{
+        display: 'flex', alignItems: 'center', gap: '1rem',
+        marginTop: '1.5rem', marginBottom: '2rem',
+        animation: 'fadeUp 0.7s ease 0.25s both'
+      }}>
+        <span style={{
+          fontFamily: 'Space Grotesk', fontSize: 'clamp(1rem, 2.5vw, 1.4rem)',
+          color: 'var(--fg2)', fontWeight: 400
+        }}>Computer Science
+
+        </span>
+        <span style={{ color: 'var(--border)', fontSize: '1.2rem' }}>·</span>
+        <span style={{ color: 'var(--fg2)', fontSize: 'clamp(1rem, 2.5vw, 1.4rem)' }}>
+          {data.university}
+        </span>
+      </div>
+
+
+
+      {/* CTA row */}
+      <div style={{
+        display: 'flex', gap: '1rem', marginTop: '2.5rem', flexWrap: 'wrap',
+        animation: 'fadeUp 0.7s ease 0.45s both'
+      }}>
+        <a href={`mailto:${data.email}`} style={{
+          display: 'inline-flex', alignItems: 'center', gap: '0.5rem',
+          background: tweaks.accentColor, color: 'oklch(0.1 0.01 240)',
+          padding: '0.75rem 1.75rem', borderRadius: '100px',
+          textDecoration: 'none', fontWeight: 600, fontSize: '0.9rem',
+          fontFamily: 'Space Grotesk', letterSpacing: '-0.01em',
+          transition: 'opacity 0.2s, transform 0.2s'
+        }}
+        onMouseEnter={(e) => {e.currentTarget.style.opacity = '0.85';e.currentTarget.style.transform = 'scale(1.03)';}}
+        onMouseLeave={(e) => {e.currentTarget.style.opacity = '1';e.currentTarget.style.transform = 'scale(1)';}}>
+          
+          Email Me
+        </a>
+        <a href={`https://github.com/${data.github}`} target="_blank" rel="noopener" style={{
+          display: 'inline-flex', alignItems: 'center', gap: '0.5rem',
+          border: '1px solid var(--border)', color: 'var(--fg)',
+          padding: '0.75rem 1.75rem', borderRadius: '100px',
+          textDecoration: 'none', fontWeight: 500, fontSize: '0.9rem',
+          fontFamily: 'Space Grotesk', letterSpacing: '-0.01em',
+          transition: 'border-color 0.2s, transform 0.2s'
+        }}
+        onMouseEnter={(e) => {e.currentTarget.style.borderColor = tweaks.accentColor;e.currentTarget.style.transform = 'scale(1.03)';}}
+        onMouseLeave={(e) => {e.currentTarget.style.borderColor = 'var(--border)';e.currentTarget.style.transform = 'scale(1)';}}>
+          
+          GitHub / {data.github}
+        </a>
+      </div>
+
+      {/* Scroll hint */}
+      <div style={{
+        position: 'absolute', bottom: '2.5rem', left: '2rem',
+        display: 'flex', alignItems: 'center', gap: '0.75rem',
+        color: 'var(--fg2)', fontSize: '0.78rem', letterSpacing: '0.1em',
+        textTransform: 'uppercase', opacity: 0.6,
+        animation: 'fadeIn 1s ease 1.2s both'
+      }}>
+        <div style={{
+          width: 1, height: 40, background: 'var(--border)'
+        }} />
+        Scroll to explore
+      </div>
+
+
+    </section>);
+
+}
+
+// ── Skills ────────────────────────────────────────────────────────────────────
+
+function Tag({ text, color }) {
+  const [hovered, setHovered] = useState(false);
+  return (
+    <span
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      style={{
+        display: 'inline-flex', alignItems: 'center',
+        padding: '0.45rem 1rem', borderRadius: '100px',
+        border: `1px solid ${hovered ? color : 'var(--border)'}`,
+        color: hovered ? color : 'var(--fg2)',
+        fontSize: '0.875rem', fontWeight: 500,
+        background: hovered ? `oklch(from ${color} l c h / 0.08)` : 'transparent',
+        transition: 'all 0.2s ease', cursor: 'default',
+        letterSpacing: '0.01em'
+      }}>
+      {text}</span>);
+
+}
+
+function Skills({ tweaks }) {
+  const [ref, visible] = useInView();
+  return (
+    <section id="skills" ref={ref} style={{
+      padding: '6rem 2rem', maxWidth: '1100px', margin: '0 auto',
+      opacity: visible ? 1 : 0, transform: visible ? 'translateY(0)' : 'translateY(40px)',
+      transition: 'opacity 0.7s ease, transform 0.7s ease'
+    }}>
+      <SectionLabel label="02" title="Technical Skills" accent={tweaks.accentColor} />
+
+      {/* Education */}
+      <div style={{
+        marginTop: '3rem', marginBottom: '3rem', padding: '2rem',
+        background: 'var(--bg2)', borderRadius: '1rem',
+        border: '1px solid var(--border)',
+        display: 'flex', gap: '3rem', flexWrap: 'wrap', alignItems: 'center'
+      }}>
+        <div>
+          <div style={{ fontSize: '0.75rem', letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--fg2)', marginBottom: '0.5rem' }}>Education</div>
+          <div style={{ fontFamily: 'Space Grotesk', fontWeight: 700, fontSize: '1.15rem' }}>Bachelor of Science in Computer Science</div>
+          <div style={{ color: 'var(--fg2)', fontSize: '0.9rem', marginTop: '0.25rem' }}>{data.university} · {data.period}</div>
+        </div>
+        <div style={{ marginLeft: 'auto', textAlign: 'right' }}>
+          <div style={{ fontSize: '0.75rem', letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--fg2)', marginBottom: '0.25rem' }}>GPA</div>
+          <div style={{ fontFamily: 'Space Grotesk', fontWeight: 700, fontSize: '2.5rem', letterSpacing: '-0.04em', color: tweaks.accentColor }}>{data.gpa}</div>
+        </div>
+      </div>
+
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '2rem', marginTop: '0' }}>
+        {Object.entries(data.skills).map(([cat, items]) =>
+        <div key={cat}>
+            <div style={{
+            fontFamily: 'Space Grotesk', fontWeight: 600, fontSize: '0.75rem',
+            letterSpacing: '0.12em', textTransform: 'uppercase',
+            color: tweaks.accentColor, marginBottom: '1rem'
+          }}>{cat}</div>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
+              {items.map((item) => <Tag key={item} text={item} color={tweaks.accentColor} />)}
+            </div>
+          </div>
+        )}
+      </div>
+
+    </section>);
+
+}
+
+// ── Section Label ─────────────────────────────────────────────────────────────
+
+function SectionLabel({ label, title, accent }) {
+  return (
+    <div style={{ display: 'flex', alignItems: 'baseline', gap: '1.25rem' }}>
+      <span style={{
+        fontFamily: 'Space Grotesk', fontWeight: 700, fontSize: '0.75rem',
+        letterSpacing: '0.12em', color: accent, textTransform: 'uppercase'
+      }}>{label}</span>
+      <span style={{ width: 40, height: 1, background: accent, display: 'inline-block', marginBottom: 3 }} />
+      <h2 style={{
+        fontFamily: 'Space Grotesk', fontWeight: 700,
+        fontSize: 'clamp(1.8rem, 4vw, 2.8rem)', letterSpacing: '-0.03em'
+      }}>{title}</h2>
+    </div>);
+
+}
+
+// ── Projects ──────────────────────────────────────────────────────────────────
+
+function ProjectCard({ project, index }) {
+  const [hovered, setHovered] = useState(false);
+  const [ref, visible] = useInView(0.1);
+
+  return (
+    <div
+      ref={ref}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      style={{
+        background: hovered ? 'var(--bg3)' : 'var(--bg2)',
+        border: `1px solid ${hovered ? project.color : 'var(--border)'}`,
+        borderRadius: '1.25rem',
+        padding: '2rem 2.25rem',
+        transition: 'all 0.3s ease',
+        transform: visible ? 'translateY(0)' : 'translateY(50px)',
+        opacity: visible ? 1 : 0,
+        transitionDelay: `${index * 0.1}s`,
+        cursor: 'default',
+        position: 'relative', overflow: 'hidden'
+      }}>
+      
+      {/* Glow */}
+      <div style={{
+        position: 'absolute', top: 0, right: 0,
+        width: 200, height: 200,
+        background: `radial-gradient(circle, ${project.color}22 0%, transparent 70%)`,
+        opacity: hovered ? 1 : 0,
+        transition: 'opacity 0.4s ease',
+        pointerEvents: 'none'
+      }} />
+
+      {/* Number */}
+      <div style={{
+        fontFamily: 'Space Grotesk', fontWeight: 700,
+        fontSize: '0.7rem', letterSpacing: '0.12em', textTransform: 'uppercase',
+        color: project.color, marginBottom: '1rem'
+      }}>
+        Project {String(index + 1).padStart(2, '0')}
+      </div>
+
+      {/* Title */}
+      <h3 style={{
+        fontFamily: 'Space Grotesk', fontWeight: 700,
+        fontSize: '1.25rem', letterSpacing: '-0.02em',
+        marginBottom: '0.75rem', lineHeight: 1.25
+      }}>{project.title}</h3>
+
+      {/* Desc */}
+      <p style={{ color: 'var(--fg2)', fontSize: '0.92rem', lineHeight: 1.65, marginBottom: '1.25rem' }}>
+        {project.desc}
+      </p>
+
+      {/* Bullets */}
+      <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '0.4rem', marginBottom: '1.5rem' }}>
+        {project.bullets.map((b, i) =>
+        <li key={i} style={{ display: 'flex', gap: '0.6rem', fontSize: '0.85rem', color: 'var(--fg2)' }}>
+            <span style={{ color: project.color, flexShrink: 0, marginTop: '0.05em' }}>▸</span>
+            {b}
+          </li>
+        )}
+      </ul>
+
+      {/* Tags + Link */}
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.4rem', alignItems: 'center', justifyContent: 'space-between' }}>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.4rem' }}>
+        {project.tags.map((t) =>
+        <span key={t} style={{
+          fontSize: '0.75rem', fontWeight: 600, letterSpacing: '0.04em',
+          color: project.color,
+          background: `oklch(from ${project.color} l c h / 0.1)`,
+          border: `1px solid oklch(from ${project.color} l c h / 0.25)`,
+          padding: '0.2rem 0.65rem', borderRadius: '100px'
+        }}>{t}</span>
+        )}
+        </div>
+        {project.link && (
+          <a href={project.link} target="_blank" rel="noopener" style={{
+            display: 'inline-flex', alignItems: 'center', gap: '0.35rem',
+            fontSize: '0.78rem', fontWeight: 600, color: project.color,
+            textDecoration: 'none', border: `1px solid oklch(from ${project.color} l c h / 0.3)`,
+            padding: '0.3rem 0.85rem', borderRadius: '100px',
+            background: `oklch(from ${project.color} l c h / 0.08)`,
+            transition: 'opacity 0.2s',
+            flexShrink: 0,
+          }}
+          onMouseEnter={e => e.currentTarget.style.opacity = '0.7'}
+          onMouseLeave={e => e.currentTarget.style.opacity = '1'}
+          >
+            Live ↗
+          </a>
+        )}
+      </div>
+    </div>);
+
+}
+
+function Projects({ tweaks }) {
+  const [ref, visible] = useInView();
+  return (
+    <section id="projects" ref={ref} style={{
+      padding: '6rem 2rem', maxWidth: '1100px', margin: '0 auto',
+      opacity: visible ? 1 : 0,
+      transition: 'opacity 0.6s ease'
+    }}>
+      <SectionLabel label="03" title="Projects" accent={tweaks.accentColor} />
+      <div style={{
+        display: 'grid',
+        gridTemplateColumns: 'repeat(auto-fill, minmax(440px, 1fr))',
+        gap: '1.5rem',
+        marginTop: '3rem'
+      }}>
+        {data.projects.map((p, i) => <ProjectCard key={p.title} project={p} index={i} />)}
+      </div>
+    </section>);
+
+}
+
+// ── Contact ───────────────────────────────────────────────────────────────────
+
+function Contact({ tweaks }) {
+  const [ref, visible] = useInView();
+  const contacts = [
+  { label: 'Email', value: data.email, href: `mailto:${data.email}` },
+  { label: 'Phone', value: data.phone, href: `tel:${data.phone}` },
+  { label: 'GitHub', value: `github.com/${data.github}`, href: `https://github.com/${data.github}` },
+  { label: 'Location', value: data.location, href: null }];
+
+
+  return (
+    <section id="contact" ref={ref} style={{
+      padding: '6rem 2rem 8rem', maxWidth: '1100px', margin: '0 auto',
+      opacity: visible ? 1 : 0, transform: visible ? 'translateY(0)' : 'translateY(40px)',
+      transition: 'opacity 0.7s ease, transform 0.7s ease'
+    }}>
+      <SectionLabel label="04" title="Contact" accent={tweaks.accentColor} />
+
+      <div style={{
+        marginTop: '4rem',
+        display: 'grid',
+        gridTemplateColumns: 'repeat(2, 1fr)',
+        gap: '1rem',
+      }}>
+        {contacts.map(({ label, value, href }) => (
+          <div key={label} style={{
+            padding: '1.75rem 2rem',
+            background: 'var(--bg2)', borderRadius: '1.25rem',
+            border: '1px solid var(--border)',
+            display: 'flex', flexDirection: 'column', gap: '0.5rem',
+            transition: 'border-color 0.2s',
+          }}
+          onMouseEnter={e => e.currentTarget.style.borderColor = tweaks.accentColor}
+          onMouseLeave={e => e.currentTarget.style.borderColor = 'var(--border)'}
+          >
+            <span style={{ fontSize: '0.7rem', letterSpacing: '0.12em', textTransform: 'uppercase', color: tweaks.accentColor, fontWeight: 600 }}>{label}</span>
+            {href
+              ? <a href={href} target="_blank" rel="noopener" style={{ color: 'var(--fg)', textDecoration: 'none', fontSize: '1rem', fontWeight: 500, wordBreak: 'break-all' }}
+                  onMouseEnter={e => e.target.style.color = tweaks.accentColor}
+                  onMouseLeave={e => e.target.style.color = 'var(--fg)'}
+                >{value}</a>
+              : <span style={{ color: 'var(--fg)', fontSize: '1rem', fontWeight: 500 }}>{value}</span>
+            }
+          </div>
+        ))}
+      </div>
+    </section>);
+
+}
+
+// ── Footer ────────────────────────────────────────────────────────────────────
+function Footer({ tweaks }) {
+  return (
+    <footer style={{
+      borderTop: '1px solid var(--border)', padding: '2rem',
+      display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+      color: 'var(--fg2)', fontSize: '0.8rem',
+      maxWidth: '1100px', margin: '0 auto'
+    }}>
+      <span>© 2026 Pawat Wangsirisuk</span>
+      <span style={{ color: tweaks.accentColor }}>Built with ♥</span>
+    </footer>);
+
+}
+
+// ── Tweaks Panel ──────────────────────────────────────────────────────────────
+function TweaksPanel({ tweaks, setTweaks, visible }) {
+  if (!visible) return null;
+  const accentOptions = [
+  { label: 'Mint', value: 'oklch(0.78 0.17 158)' },
+  { label: 'Sky', value: 'oklch(0.78 0.17 220)' },
+  { label: 'Gold', value: 'oklch(0.78 0.17 60)' },
+  { label: 'Rose', value: 'oklch(0.78 0.17 10)' },
+  { label: 'Violet', value: 'oklch(0.78 0.17 300)' }];
+
+  const update = (key, val) => {
+    const next = { ...tweaks, [key]: val };
+    setTweaks(next);
+    window.parent.postMessage({ type: '__edit_mode_set_keys', edits: next }, '*');
+  };
+  return (
+    <div style={{
+      position: 'fixed', bottom: '2rem', right: '2rem', zIndex: 10000,
+      background: 'oklch(0.16 0.01 240)', border: '1px solid var(--border)',
+      borderRadius: '1rem', padding: '1.5rem', width: 260,
+      boxShadow: '0 20px 60px oklch(0 0 0 / 0.5)',
+      fontFamily: 'DM Sans, sans-serif'
+    }}>
+      <div style={{ fontFamily: 'Space Grotesk', fontWeight: 700, fontSize: '0.85rem', letterSpacing: '0.05em', marginBottom: '1.25rem', color: 'var(--fg)' }}>Tweaks</div>
+
+      <div style={{ marginBottom: '1rem' }}>
+        <div style={{ fontSize: '0.72rem', letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--fg2)', marginBottom: '0.6rem' }}>Accent Color</div>
+        <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
+          {accentOptions.map((opt) =>
+          <button key={opt.label} onClick={() => update('accentColor', opt.value)} style={{
+            width: 28, height: 28, borderRadius: '50%',
+            background: opt.value,
+            border: tweaks.accentColor === opt.value ? '2px solid white' : '2px solid transparent',
+            cursor: 'pointer', outline: 'none', transition: 'transform 0.15s'
+          }}
+          onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.2)'}
+          onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}
+          title={opt.label} />
+          )}
+        </div>
+      </div>
+
+      <label style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', cursor: 'pointer', marginTop: '0.75rem' }}>
+        <span style={{ fontSize: '0.82rem', color: 'var(--fg2)' }}>Show Availability</span>
+        <div onClick={() => update('showAvailability', !tweaks.showAvailability)} style={{
+          width: 36, height: 20, borderRadius: '100px',
+          background: tweaks.showAvailability ? tweaks.accentColor : 'var(--border)',
+          position: 'relative', cursor: 'pointer', transition: 'background 0.2s'
+        }}>
+          <div style={{
+            position: 'absolute', top: 3, left: tweaks.showAvailability ? 18 : 3,
+            width: 14, height: 14, borderRadius: '50%', background: 'white',
+            transition: 'left 0.2s'
+          }} />
+        </div>
+      </label>
+    </div>);
+
+}
+
+// ── App ───────────────────────────────────────────────────────────────────────
+
+function App() {
+  const [tweaks, setTweaks] = useState(TWEAK_DEFAULTS);
+  const [tweaksVisible, setTweaksVisible] = useState(false);
+
+  useEffect(() => {
+    // Register listener first, then announce availability
+    const handler = (e) => {
+      if (e.data?.type === '__activate_edit_mode') setTweaksVisible(true);
+      if (e.data?.type === '__deactivate_edit_mode') setTweaksVisible(false);
+    };
+    window.addEventListener('message', handler);
+    window.parent.postMessage({ type: '__edit_mode_available' }, '*');
+    return () => window.removeEventListener('message', handler);
+  }, []);
+
+  return (
+    <>
+      <Nav tweaks={tweaks} />
+      <Hero tweaks={tweaks} />
+      {/* Horizontal rule */}
+      <div style={{ maxWidth: '1100px', margin: '0 auto 0', height: 1, background: 'var(--border)' }} />
+      <Skills tweaks={tweaks} />
+      <div style={{ maxWidth: '1100px', margin: '0 auto', height: 1, background: 'var(--border)' }} />
+      <Projects tweaks={tweaks} />
+      <div style={{ maxWidth: '1100px', margin: '0 auto', height: 1, background: 'var(--border)' }} />
+      <Contact tweaks={tweaks} />
+      <Footer tweaks={tweaks} />
+      <TweaksPanel tweaks={tweaks} setTweaks={setTweaks} visible={tweaksVisible} />
+    </>);
+
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>
