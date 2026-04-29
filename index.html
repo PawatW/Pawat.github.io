@@ -189,7 +189,7 @@ function Nav({ tweaks }) {
     return () => window.removeEventListener('scroll', fn);
   }, []);
 
-  const links = ['About', 'Skills', 'Projects', 'Contact'];
+  const links = ['About', 'Education', 'Skills', 'Projects', 'Contact'];
 
   return (
     <nav style={{
@@ -369,25 +369,26 @@ function Tag({ text, color }) {
 
 }
 
-function Skills({ tweaks }) {
+// ── Education ─────────────────────────────────────────────────────────────────
+
+function Education({ tweaks }) {
   const [ref, visible] = useInView();
   return (
-    <section id="skills" ref={ref} style={{
+    <section id="education" ref={ref} style={{
       padding: '6rem 2rem', maxWidth: '1100px', margin: '0 auto',
       opacity: visible ? 1 : 0, transform: visible ? 'translateY(0)' : 'translateY(40px)',
       transition: 'opacity 0.7s ease, transform 0.7s ease'
     }}>
-      <SectionLabel label="02" title="Technical Skills" accent={tweaks.accentColor} />
+      <SectionLabel label="02" title="Education" accent={tweaks.accentColor} />
 
-      {/* Education */}
       <div style={{
-        marginTop: '3rem', marginBottom: '3rem', padding: '2rem',
+        marginTop: '3rem', padding: '2.5rem',
         background: 'var(--bg2)', borderRadius: '1rem',
         border: '1px solid var(--border)',
         display: 'flex', gap: '3rem', flexWrap: 'wrap', alignItems: 'center'
       }}>
         <div>
-          <div style={{ fontSize: '0.75rem', letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--fg2)', marginBottom: '0.5rem' }}>Education</div>
+          <div style={{ fontSize: '0.75rem', letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--fg2)', marginBottom: '0.5rem' }}>Degree</div>
           <div style={{ fontFamily: 'Space Grotesk', fontWeight: 700, fontSize: '1.15rem' }}>Bachelor of Science in Computer Science</div>
           <div style={{ color: 'var(--fg2)', fontSize: '0.9rem', marginTop: '0.25rem' }}>{data.university} · {data.period}</div>
         </div>
@@ -396,8 +397,20 @@ function Skills({ tweaks }) {
           <div style={{ fontFamily: 'Space Grotesk', fontWeight: 700, fontSize: '2.5rem', letterSpacing: '-0.04em', color: tweaks.accentColor }}>{data.gpa}</div>
         </div>
       </div>
+    </section>);
+}
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '2rem', marginTop: '0' }}>
+function Skills({ tweaks }) {
+  const [ref, visible] = useInView();
+  return (
+    <section id="skills" ref={ref} style={{
+      padding: '6rem 2rem', maxWidth: '1100px', margin: '0 auto',
+      opacity: visible ? 1 : 0, transform: visible ? 'translateY(0)' : 'translateY(40px)',
+      transition: 'opacity 0.7s ease, transform 0.7s ease'
+    }}>
+      <SectionLabel label="03" title="Technical Skills" accent={tweaks.accentColor} />
+
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '2rem', marginTop: '3rem' }}>
         {Object.entries(data.skills).map(([cat, items]) =>
         <div key={cat}>
             <div style={{
@@ -541,7 +554,7 @@ function Projects({ tweaks }) {
       opacity: visible ? 1 : 0,
       transition: 'opacity 0.6s ease'
     }}>
-      <SectionLabel label="03" title="Projects" accent={tweaks.accentColor} />
+      <SectionLabel label="04" title="Projects" accent={tweaks.accentColor} />
       <div style={{
         display: 'grid',
         gridTemplateColumns: 'repeat(auto-fill, minmax(440px, 1fr))',
@@ -571,7 +584,7 @@ function Contact({ tweaks }) {
       opacity: visible ? 1 : 0, transform: visible ? 'translateY(0)' : 'translateY(40px)',
       transition: 'opacity 0.7s ease, transform 0.7s ease'
     }}>
-      <SectionLabel label="04" title="Contact" accent={tweaks.accentColor} />
+      <SectionLabel label="05" title="Contact" accent={tweaks.accentColor} />
 
       <div style={{
         marginTop: '4rem',
@@ -703,6 +716,8 @@ function App() {
       <Hero tweaks={tweaks} />
       {/* Horizontal rule */}
       <div style={{ maxWidth: '1100px', margin: '0 auto 0', height: 1, background: 'var(--border)' }} />
+      <Education tweaks={tweaks} />
+      <div style={{ maxWidth: '1100px', margin: '0 auto', height: 1, background: 'var(--border)' }} />
       <Skills tweaks={tweaks} />
       <div style={{ maxWidth: '1100px', margin: '0 auto', height: 1, background: 'var(--border)' }} />
       <Projects tweaks={tweaks} />
